@@ -1,5 +1,7 @@
 package com.dogjaw.services.authentication.b2c;
 
+import java.util.Base64;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -22,6 +24,17 @@ public class RsaKeyB2C {
     @JsonProperty("n")
     private String n;
 
+    @JsonProperty("nbf")
+    private long nbf;
+    
+    public long getNbf() {
+    	return nbf;
+    }
+    
+    public void setNbf(long nbf) {
+    	this.nbf = nbf;
+    }
+    
     public String getKid() {
         return kid;
     }

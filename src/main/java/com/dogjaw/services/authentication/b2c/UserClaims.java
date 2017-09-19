@@ -58,10 +58,43 @@ public class UserClaims implements UserDetails {
 
     @JsonProperty("family_name")
     private String family_name;
+    
+    @JsonProperty("postalCode")
+    private String postalCode;
+
+	@JsonProperty("jobTitle")
+    private String jobTitle;
+    
+    @JsonProperty("tfp")
+    private String tfp;
 
     @JsonProperty("acr")
     private String acr;
 
+    public String getPostalCode() {
+		return postalCode;
+	}
+
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+	public String getTfp() {
+		return tfp;
+	}
+
+	public void setTfp(String tfp) {
+		this.tfp = tfp;
+	}
+    
     public String getSub() {
         return sub;
     }
@@ -176,7 +209,7 @@ public class UserClaims implements UserDetails {
 
     @Override
     public String toString() {
-        return "ClassPojo [sub = " + sub + ", nbf = " + nbf + ", iss = " + iss + ", emails = " + emails + ", ver = " + ver + ", given_name = " + givenName + ", iat = " + iat + ", auth_time = " + auth_time + ", user_name = " + user_name + ", exp = " + exp + ", oid = " + oid + ", name = " + name + ", aud = " + aud + ", family_name = " + family_name + ", acr = " + acr + "]";
+        return "ClassPojo [sub = " + sub + ", nbf = " + nbf + ", iss = " + iss + ", emails = " + emails + ", ver = " + ver + ", given_name = " + givenName + ", iat = " + iat + ", auth_time = " + auth_time + ", user_name = " + user_name + ", exp = " + exp + ", oid = " + oid + ", name = " + name + ", aud = " + aud + ", family_name = " + family_name + ", acr = " + acr + ", postalCode = " + postalCode + ", jobTitle = " + jobTitle + ", tfp = " + tfp + "]";
     }
 
 

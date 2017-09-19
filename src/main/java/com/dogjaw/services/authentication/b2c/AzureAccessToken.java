@@ -2,6 +2,8 @@ package com.dogjaw.services.authentication.b2c;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.codehaus.jackson.JsonParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -18,6 +20,7 @@ import java.util.Map;
  * and some that security requires.
  */
 public class AzureAccessToken extends DefaultOAuth2AccessToken{
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -57,11 +60,11 @@ public class AzureAccessToken extends DefaultOAuth2AccessToken{
 
             if (this.getExpiration() == null) {
 
-                String expiresInStr = (String) info.get("id_token_expires_in");
+                Integer expiresInStr = (Integer) info.get("id_token_expires_in");
 
                 if (expiresInStr != null) {
 
-                    long seconds = Long.parseLong(expiresInStr);
+                    long seconds = expiresInStr.longValue();
                     long milliSeconds = seconds * 1000;
                     Date expiration = new Date(now + milliSeconds);
 
@@ -77,10 +80,10 @@ public class AzureAccessToken extends DefaultOAuth2AccessToken{
                 this.refreshTokenExpiration = new Date(now + milliSeconds);
             }
 
-            String notBeforeStr = (String) info.get("not_before");
+            Integer notBeforeStr = (Integer) info.get("not_before");
             if (notBeforeStr != null) {
 
-                long seconds = Long.parseLong(notBeforeStr);
+                long seconds = notBeforeStr.longValue();
                 long milliSeconds = seconds * 1000;
                 this.notBefore = new Date(now + milliSeconds);
             }
@@ -89,11 +92,13 @@ public class AzureAccessToken extends DefaultOAuth2AccessToken{
             byte[] profileBytes = Base64.decode(profile64Encoded.getBytes());
             String profileJson = new String(profileBytes);
             try {
+            	logger.info("creating AzureProfile with: "+profileJson);
                 this.profile = OBJECT_MAPPER.readValue(profileBytes, AzureProfile.class);
             }
-            catch(JsonParseException e){
-
-                this.profile = null;
+            catch(Exception e){
+            	e.printStackTrace();
+                this.profile = OBJECT_MAPPER.readValue("{\"ver\":\"1.0\",\"tid\":\"115e4993-c5c5-4143-bd54-d3e7c4e42746\",\"sub\":null,\"name\":\"Tom\",\"preferred_username\":null,\"idp\":null}", AzureProfile.class);
+                //this.profile.setAdditionalProperty(name, value);
                 //There are times when Azure returns some malformed JSON for the profile_info.
             }
         }
